@@ -475,10 +475,37 @@
   </div>
 
   <!-- ===== GATE-BY-GATE ===== -->
-  <h2 class="section-head"><span class="num">02 · The five gates</span>How a ticker <em>moves through the machine</em>.</h2>
+  <h2 class="section-head"><span class="num">02 · The ten gates</span>How a ticker <em>moves through the machine</em>.</h2>
   <p class="section-deck">
-    Each gate has a clear input, a clear output, and a clear handover. Compute is committed at gate boundaries, not before — so partner sign-off at Gate 6 PASS is what licenses the deep work in Gate 7.
+    Each gate has a clear input, a clear output, and a clear handover. Compute is committed at gate boundaries, not before — so partner sign-off at Gate 6 PASS is what licenses the deep work in Gate 7. Gates 1–5 are the upstream pipework that delivers a screen-ready candidate to Gate 6; Gates 6–10 are where Spock v4 does its substantive work.
   </p>
+
+  <!-- ===== GATES 1-5 ===== -->
+  <div class="gate">
+    <h3 class="sub-head"><span class="gate-tag">Gates 1–5</span>Upstream — getting to a screen-ready candidate.</h3>
+    <p class="gate-meta"><span>Cadence: continuous</span><span>Compute: light, mostly data plumbing</span></p>
+    <p>
+      Before a ticker reaches Spock v4 proper, it travels through five upstream gates that turn a universe of public companies into a screen-ready shortlist. The work is deliberately mechanical: it asks whether a name is investable, tradeable, and well-described enough to be worth analytical compute.
+    </p>
+    <p>
+      <strong class="ink">Gate 1 — Universe.</strong> Define the addressable set: geography, sector, listing venue, market-cap band, and any thesis-specific cuts (for example, "listed digital-banking platforms globally with market cap above $1 billion"). The output is a population of tickers.
+    </p>
+    <p>
+      <strong class="ink">Gate 2 — Liquidity and tradeability.</strong> Filter for actual investability — average daily volume, free float, listing venue access, no hostile dual-class structures that block external capital. The screen here is binary: can Chronos take and exit a position cleanly?
+    </p>
+    <p>
+      <strong class="ink">Gate 3 — Composite Performance Index (CPI).</strong> A multi-dimensional financial and operational scoring pass. Each ticker is scored on growth, margin durability, capital efficiency, balance-sheet quality, and several thesis-relevant dimensions, all on the Spock index-100 convention (100 = sector median; range typically 50–150). The output is a single revised CPI plus the dimension breakdown — used downstream as the financial baseline against which the Gate 7 deep research is benchmarked.
+    </p>
+    <p>
+      <strong class="ink">Gate 4 — Tier-1 financial extraction.</strong> A full financial-statement pull from EODHD and primary filings: revenue, margins, balance sheet, cash flow, segment data, capital structure. This is the dataset that Gate 7's valuation workstream consumes.
+    </p>
+    <p>
+      <strong class="ink">Gate 5 — Tier-2 financial and qualitative extraction.</strong> Goes one layer deeper: peer-set construction, segment-level economics, management-disclosed KPIs, gating-question evidence (regulatory, competitive, strategic). Gate 5 is the last upstream gate before partner attention is asked for.
+    </p>
+    <p>
+      The combined output of Gates 1–5 is what Gate 6 consumes as its <em>screening pack</em>. A clean Gate 5 produces a Gate 6 screen that partners can vote on quickly; a thin Gate 5 produces a screen that partners would have to redo themselves, which defeats the purpose.
+    </p>
+  </div>
 
   <!-- ===== GATE 6 ===== -->
   <div class="gate">
