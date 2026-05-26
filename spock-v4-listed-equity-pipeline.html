@@ -558,10 +558,10 @@
     </p>
 
     <p>
-      The agents cluster by what kind of work they do. The qualitative foundation establishes the company on its own terms. The demand-side picture asks how it competes and what customers think of it. The team agent asks who is running it. The Valuer turns it all into a number. The primary-record agents ground everything against what the company has said on the record. The consumer-side, Street-side, and investor-side agents triangulate three views of how the market sees the business. The Red-Flag Synthesizer runs last because its job is to read every other output and notice what they collectively imply. The Fact-Checker is woven through it all, not bolted on at the end.
+      The agents cluster by what kind of work they do. The qualitative foundation establishes the company on its own terms. The demand-side picture covers competition and customer voice. The team agent reads the people running it. The Valuer turns it all into a number. The primary-record agents ground everything against what the company has said on the record. The consumer-side, Street-side, and investor-side agents triangulate three views of how the market sees the business. The Red-Flag Synthesizer runs last; its inputs are the other twelve agents' outputs. The Fact-Checker is woven one-to-one through every drafter, not bolted on at the end.
     </p>
 
-    <p style="margin-top:24px;"><strong>The thirteen agents.</strong></p>
+    <p style="margin-top:24px;"><strong>The thirteen agents — each is a structured Claude invocation against a defined source set and prompt, paired with the Fact-Checker on its output.</strong></p>
 
     <div class="agent-cluster">The qualitative foundation</div>
 
@@ -569,7 +569,7 @@
       <span class="ws-tag">Agent 01</span>
       <h4>The Historian <code class="ident">company-history</code></h4>
       <p>
-        The Historian makes the company legible as a thing that has been changing for a long time before any of us looked at it. It maps the founding insight, walks the structural pivots — product launched with versus product sold now, the moments management bet the company on a change of direction — and treats the IPO, where applicable, as a chapter rather than a starting line. It ends on the current chapter: what this business is doing today and what has changed in the last twelve months. Output: a six-paragraph narrative the rest of the agents can take for granted.
+        Reads S-1 prospectus and amendments where the IPO is recent, the founder-letter archive, the first three annual reports post-listing, and management interviews going back to founding. Produces a six-paragraph corporate history covering founding insight, structural pivots, IPO chapter, current twelve-month state, and the open strategic questions the next four quarters will resolve. Paired with the Fact-Checker on dates, named transactions, and capital-raising events. Most common failure mode: filling pre-IPO history from session memory when the S-1 has not been retrieved.
       </p>
     </div>
 
@@ -577,7 +577,7 @@
       <span class="ws-tag">Agent 02</span>
       <h4>The AI Economist <code class="ident">ai-unit-economics</code></h4>
       <p>
-        The AI Economist asks the question most investor decks beg and most management teams duck: does the AI story show up in the unit economics, or only in the slide? It places the company on the Spock AI Maturity framework — a five-level ladder where Level 1 is opportunistic AI use, Level 2 is operational AI embedded in the business, and Level 5 is a business model that could not exist without AI. Evidence: product disclosures, capex line items, gross-margin drift, headcount mix, and the specific feedback loops between the company's data and its model output. Output: a level assignment with citations, and a verdict on whether the AI narrative is load-bearing or decorative.
+        Reads product disclosures, capex line items, R&amp;D-headcount mix, gross-margin trajectory, and explicit AI references in earnings calls. Produces a level assignment on the Spock AI Maturity framework (Level 1 opportunistic use through Level 5 model-as-business), with citations for each evidence point, and a verdict on whether AI is load-bearing or decorative in the unit economics. Paired with the Fact-Checker on capex disclosures, margin-line items, and headcount counts. Most common failure mode: scoring high on management-narrative density when the financial footprint is small.
       </p>
     </div>
 
@@ -587,7 +587,7 @@
       <span class="ws-tag">Agent 03</span>
       <h4>The Cartographer <code class="ident">competitor-analysis</code></h4>
       <p>
-        The Cartographer maps the competitive ground the company stands on — direct rivals, adjacent threats, the long-tail incumbents whose moves matter. It decomposes the moat using the Spock <em>moat_index</em> (100 = sector median; range typically 50–150), scoring each component of competitive advantage: switching costs, network effects, scale economies, regulatory positioning, proprietary data. Then it runs a three-year competitive war-game — what each of the top three competitors is likely to do, how this company would respond, where the moat holds versus erodes. Output: a competitive position read that lets the Valuer stop hand-waving about durability.
+        Reads competitor 10-Ks and equivalents, sector trade press, regulatory filings touching market structure, and the company's own competitor disclosures. Maps direct rivals and adjacent threats, decomposes the moat across switching costs, network effects, scale economies, regulatory positioning, and proprietary data using the Spock <em>moat_index</em> (100 = sector median; range 50–150), and runs a three-year competitive war-game on the top three rivals. Paired with the Fact-Checker on competitor financials and market-share claims. Most common failure mode: scoring moat components without naming the specific evidence anchor.
       </p>
     </div>
 
@@ -595,7 +595,7 @@
       <span class="ws-tag">Agent 04</span>
       <h4>The Customer Listener <code class="ident">voice-of-customer</code></h4>
       <p>
-        The Customer Listener mines authentic product-level signal — what users say when management is not in the room. It works through Reddit threads on the product, Trustpilot product pages, PissedConsumer complaints, and any other forum where customers speak in their own voice about using the thing. The discipline is to weight signal by specificity: a complaint that describes a particular workflow failing is worth more than a generic one-star review. Output: a structured read on what is working at the product layer and what is not — often the earliest warning, and the earliest validation, that a thesis is right or wrong.
+        Reads Reddit product threads, Trustpilot product pages, PissedConsumer complaint flow, and forum content where users discuss the product in their own words. Produces a structured read on product-level signal, weighted by specificity — a complaint naming a workflow failure counts more than a generic one-star — with raw extracts preserved for the IC pack. Paired with the Fact-Checker on volume claims and on management's stated complaint-resolution metrics. Most common failure mode: under-weighting low-volume but high-specificity threads in favour of aggregate star ratings.
       </p>
     </div>
 
@@ -605,7 +605,7 @@
       <span class="ws-tag">Agent 05</span>
       <h4>The Org Reader <code class="ident">people-and-culture</code></h4>
       <p>
-        The Org Reader takes the company apart at the level of the people running it. CEO bio with public-trace cross-checks. C-suite roster with bio-gap flags where public information is suspiciously thin. Board composition with governance flags — dual-class structures, committee concentration, founder over-reach, the presence or absence of an AI-specialist director on a company selling an AI thesis. Glassdoor mining for cultural signal: are engineers leaving, what do exit reviews say, does the recruiting-brand rhetoric match what people report inside. Output: a bench-depth verdict on whether the second line is real or notional, and a key-person-risk read on whether the thesis depends on one human being.
+        Reads the proxy statement, biographies on company IR pages, LinkedIn profiles for the named executive officers and direct reports, board-committee charters, and Glassdoor reviews of the company. Produces a CEO read with public-trace cross-checks, a C-suite roster with bio-gap flags, a board-composition read with governance flags (dual-class, committee concentration, AI-specialist coverage), and a bench-depth verdict with key-person-risk attached. Paired with the Fact-Checker on tenure, prior-role and board-committee assertions. Most common failure mode: treating thin public information on a named executive as a neutral signal rather than as a flag.
       </p>
     </div>
 
@@ -615,7 +615,7 @@
       <span class="ws-tag">Agent 06</span>
       <h4>The Valuer <code class="ident">valuation-bespoke</code></h4>
       <p>
-        The Valuer turns the qualitative work into a number. Peer comparables on revenue, earnings, and growth-adjusted multiples — picked for genuine comparability, not lazy sector buckets. A reverse-multiple sanity check asking the unflattering question: what implied growth rate is the market already pricing in. Scenario analysis across bull, base, and bear cases with a probability-weighted IRR. A year-by-year operating model. An exit-route assessment — strategic acquirer, secondary, takeout, structural — and an entry-price recommendation expressed as starter, full, and avoid bands. The valuation is built from the Historian's narrative and the Cartographer's moat read each time; a template would smuggle in assumptions no one notices.
+        Reads the Gate 4 financial extract, the Historian's narrative, the Cartographer's moat read, peer-set financials, and the analyst consensus assembled by the Street Reader. Produces peer multiples on revenue, earnings, and growth-adjusted bases; a reverse-multiple sanity check; bull / base / bear scenarios with explicit driver tables and a probability-weighted IRR; a year-by-year operating model; an exit-route read; and an entry-price recommendation in starter / full / avoid bands. Paired with the Fact-Checker on every financial input. Most common failure mode: peer-set drift — lazy sector buckets substituted for genuine comparability.
       </p>
     </div>
 
@@ -625,7 +625,7 @@
       <span class="ws-tag">Agent 07</span>
       <h4>The Filings Reader <code class="ident">primary-filings</code></h4>
       <p>
-        The Filings Reader grounds everything else in what the company has said on the record. Routing is by exchange: US tickers to SEC EDGAR (10-Ks, 10-Qs, 8-Ks, and S-1 / amendments where the IPO is recent); UK tickers to the FCA's NSM and Investegate; Hong Kong tickers to HKEX. It pulls the annual and quarterly disclosures, risk factors, segment economics where reported, related-party notes, off-balance-sheet items. Output: a synthesised primary-disclosure read with citations — the document the rest of the pipeline gets checked against when management language and analyst language start drifting apart.
+        Reads, by exchange: SEC EDGAR (10-K, 10-Q, 8-K, S-1 and amendments) for US tickers; FCA NSM and Investegate for UK; HKEX for Hong Kong. Produces a synthesised primary-disclosure read covering risk factors, segment economics, related-party transactions, off-balance-sheet items, and material-event flow, each citation linked to the source URL. Paired with the Fact-Checker as the source-of-truth fallback for every other agent — claims that conflict with this output are flagged for revision. Most common failure mode: missing material 8-K or interim disclosure when the agent runs against a stale ingestion window.
       </p>
     </div>
 
@@ -633,7 +633,7 @@
       <span class="ws-tag">Agent 08</span>
       <h4>The Transcript Analyst <code class="ident">earnings-transcripts</code></h4>
       <p>
-        The Transcript Analyst works through the last four quarters of management language on earnings calls. It reads not just what management is saying but what management is hedging, where guidance has shifted quarter over quarter, and — most usefully — the questions management is asked that it does not answer cleanly. Analyst questions are the wild variable: the Street is often closer to the truth on a specific operational issue than the company will publicly admit. Output: a structured tagging of management posture across the four quarters, with the hedges, the guidance-deltas, and the conspicuous silences flagged for the Red-Flag Synthesizer.
+        Reads the last four quarters of earnings-call transcripts and the corresponding prepared-remarks and Q&amp;A sections. Produces a structured tagging of management posture quarter-over-quarter: hedges, guidance deltas, unanswered analyst questions, and the explicit re-baselining of any prior commitment. Output feeds the Red-Flag Synthesizer directly. Paired with the Fact-Checker on quoted figures and on tenure of any specific guidance commitment. Most common failure mode: paraphrasing management language into something cleaner than the original — losing the hedge that was the actual signal.
       </p>
     </div>
 
@@ -643,7 +643,7 @@
       <span class="ws-tag">Agent 09</span>
       <h4>The Community Auditor <code class="ident">community-intelligence</code></h4>
       <p>
-        The Community Auditor reads the consumer-side picture: what is happening at the user end of the funnel, not the order-book end. Better Business Bureau complaints with severity tagging, Trustpilot at the company level, PissedConsumer for unmoderated complaint flow, and — for US tickers — the CFPB enforcement database. Mainstream-press coverage of customer experience rounds it out. This is the agent that catches operational rot early: a step-change in complaint volume, a specific product feature that keeps appearing in complaints, a regulatory enforcement action management has not flagged. Output: a verdict on whether what the customer sees matches what management says the customer sees.
+        Reads Better Business Bureau complaints with severity tags, Trustpilot at the company level, PissedConsumer unmoderated flow, and — for US tickers — the CFPB enforcement database. Mainstream-press coverage of customer experience completes the source set. Produces a verdict on whether what the customer sees matches what management says the customer sees, with step-change flags in complaint volume and any unflagged enforcement actions named explicitly. Paired with the Fact-Checker on enforcement-action citations. Most common failure mode: failing to date the complaint set, so a step-change is washed out across years.
       </p>
     </div>
 
@@ -653,7 +653,7 @@
       <span class="ws-tag">Agent 10</span>
       <h4>The Street Reader <code class="ident">analyst-coverage</code></h4>
       <p>
-        The Street Reader assembles the sell side's picture: every published analyst report we can access, the consensus price target, the rating distribution across buy / hold / sell, and — the part that does most of the work — a gap analysis. What is the sell side asking, and just as importantly, what is it <em class="ink">not</em> asking. Where the consensus is anchored to a number that has not been re-derived in two quarters, where the bull case rests on a single covered analyst, where every report cites the same management talking point — the alpha is usually in the gap. Output: a Street picture with the gaps deliberately surfaced.
+        Reads every accessible sell-side analyst report on the ticker, the consensus price target and rating distribution, and the public commentary trail around analyst-day events. Produces the buy / hold / sell breakdown, the consensus price-target read, and — the part that does most of the work — a gap analysis naming which questions the sell side is <em class="ink">not</em> asking, where consensus is anchored to a number not re-derived in two quarters, and where the bull case rests on a single covered analyst. Paired with the Fact-Checker on rating-distribution counts. Most common failure mode: equal-weighting reports that draw from the same management-day script.
       </p>
     </div>
 
@@ -663,7 +663,7 @@
       <span class="ws-tag">Agent 11</span>
       <h4>The Sentiment Reader <code class="ident">investor-sentiment</code></h4>
       <p>
-        The market-side counterpart to the Customer Listener and the Street Reader. Reddit's r/wallstreetbets, r/stocks, r/investing, r/SecurityAnalysis. StockTwits. Short-seller coverage from Hindenburg, Muddy Waters, Spruce Point, Citron, Wolfpack, Kerrisdale — published reports and the social trail around them. Options-flow narratives. Short-interest dynamics and cost-to-borrow. <em class="ink">Added to the pipeline this week</em>. The CHYM run revealed the Customer Listener's consumer focus was leaving a real gap on investor-side sentiment, and a gap is not something you patch with a paragraph at the end. It needs its own agent with its own sources.
+        Reads r/wallstreetbets, r/stocks, r/investing, r/SecurityAnalysis and StockTwits; published short-seller reports from Hindenburg, Muddy Waters, Spruce Point, Citron, Wolfpack and Kerrisdale; options-flow commentary; short-interest dynamics and cost-to-borrow data. Produces a structured investor-side sentiment read, with named bear arguments cited by source and any short-interest step-changes flagged. <em class="ink">Added to the pipeline this week</em> after the CHYM run showed the Customer Listener's consumer focus left investor sentiment uncovered. Paired with the Fact-Checker on short-interest figures and on direct quotes from published bear reports. Most common failure mode: paraphrasing a published bear thesis without engaging the specific claim.
       </p>
     </div>
 
@@ -673,7 +673,7 @@
       <span class="ws-tag">Agent 12</span>
       <h4>The Red-Flag Synthesizer <code class="ident">red-flags</code></h4>
       <p>
-        The Red-Flag Synthesizer runs after the other generative agents complete. It reads all their outputs together and pattern-matches against the canonical 86-flag catalogue spanning eleven categories — operational, regulatory, accounting, governance and disclosure among them. Output: a structured red-flag list with severity tags — HIGH, MEDIUM, LOW — and a set of explicit IC discussion items. Some flags come from a single agent: the Transcript Analyst catches a hedge, the Community Auditor catches a CFPB action. The most important come from two agents quietly disagreeing — the earnings call saying one thing and the consumer complaints saying another, the analyst consensus saying one thing and the short interest saying another. That cross-agent signal is what the synthesizer is built to catch.
+        Reads the structured outputs of Agents 01 through 11 together, pattern-matching against the canonical 86-flag catalogue across eleven categories — operational, regulatory, accounting, governance, disclosure and others. Produces a structured red-flag list with HIGH / MEDIUM / LOW severity tags and a set of explicit IC discussion items. Single-agent flags (a hedge in transcripts, a CFPB action in community signal) are tagged at source; cross-agent flags (earnings call versus consumer complaints; analyst consensus versus short interest) are surfaced as their own category. Paired with the Fact-Checker on every flag's evidence link. Most common failure mode: down-weighting a cross-agent signal because no single agent flagged it independently.
       </p>
     </div>
 
@@ -683,7 +683,7 @@
       <span class="ws-tag">Agent 13</span>
       <h4>The Fact-Checker <code class="ident">fact-checker</code></h4>
       <p>
-        The Fact-Checker is not at the end of the line; it is woven through every other agent. Pairing one-to-one with each of the twelve generative agents, it runs the ADR-0012 verifier-pair discipline on every load-bearing output. Each claim is tagged T1 (primary source), T2 (secondary source), inference (analyst reasoning), or unverified — and the drafter revises on the tags. The drafter wants to be coherent; the Fact-Checker only cares whether claims are true. That tension does most of the heavy lifting against drafter drift. The verifier's own source-of-truth blocks must themselves carry primary-source citations — a discipline added this week, after the CHYM IPO-basics chain showed what happens when they do not.
+        Reads each drafter agent's output paired with its source-of-truth block, the primary-source URLs cited in that block, and the standing rules in operating memory. Produces a tagging of every load-bearing claim as T1 (primary source), T2 (secondary), inference, or unverified — the drafter revises on the tags. Runs the ADR-0012 verifier-pair discipline one-to-one against each of the twelve generative agents. The verifier's own source-of-truth block must itself carry primary-source citations, a discipline added this week after the CHYM IPO-basics chain showed what happens when it does not. Most common failure mode: ratifying a confidently-stated source-of-truth that was never grounded in a fetched URL.
       </p>
     </div>
   </div>
@@ -784,9 +784,9 @@
   <div class="layer">
     <div class="lnum">5</div>
     <div>
-      <h4>Cross-agent red flags.</h4>
+      <h4>The Red-Flag Synthesizer's output, read as a verification artefact.</h4>
       <p>
-        Pattern-matching across the eleven other generative agents for inconsistencies, contradictions, or convergent signals — the work of the Red-Flag Synthesizer. The most important finding in a deep dive often emerges from two agents disagreeing: the Transcript Analyst saying one thing and the Community Auditor saying another, the Street Reader saying one thing and the Sentiment Reader saying another. The synthesis pass is built to notice that.
+        Same artefact as Agent 12's Gate 7 output, two purposes. The Gate 7 output is the diagnostic — the structured 86-flag list shipped into the IC pack as IC discussion items. The verification reading of that same output happens here: are the cross-agent inconsistencies it surfaced — Transcript Analyst versus Community Auditor, Street Reader versus Sentiment Reader — actually resolved in the assembled pack, or has the pack quietly chosen one signal and dropped the other? The agent produces the flags; this layer audits whether the pack honoured them.
       </p>
     </div>
   </div>
@@ -814,9 +814,9 @@
   <div class="layer">
     <div class="lnum">8</div>
     <div>
-      <h4>Standing rules in memory.</h4>
+      <h4>Standing rules in operating memory — institutional discipline.</h4>
       <p>
-        A small but accumulating set of rules captured as the pipeline matures. Every date in a partner document must trace to a verified external anchor — no invented deadlines. No process notes in partner-facing documents — no version labels, no internal changelog callouts. All partners are "Partner," not "Founding Partner." The Spock / Virtual Chronos / Chronos taxonomy. Each rule is in memory because a specific failure made it necessary. Non-negotiable for the same reason.
+        Not a verification mechanism in the sense of the other layers — this one is the rule, not the verifier of the rule. A small accumulating set of standing instructions captured as the pipeline matures: every date in a partner document must trace to a verified external anchor; no version labels or internal changelog callouts in partner-facing documents; all Chronos partners are "Partner," not "Founding Partner"; the Spock / Virtual Chronos / Chronos taxonomy is load-bearing. Each rule is in operating memory because a specific failure made it necessary. The mechanism that catches violations of these rules is the cold read (Layer 9) and the partner read at Gate 10.
       </p>
     </div>
   </div>
@@ -847,32 +847,34 @@
 
   <div class="sidebar">
     <div class="tag">The roster — a sample</div>
-    <h4>Thirty-two judges across sixteen dimensions.</h4>
+    <h4>Thirty-two judges across sixteen dimensions — passing and failing, named honestly.</h4>
     <dl>
-      <dt>J-01 — Falsifiability of central thesis</dt>
-      <dd>Is there a sentence of the form "X will reach Y by Z" the market can later mark you against? Or is the thesis a vibe?</dd>
-      <dt>J-07 — Quantified negative-IRR scenario</dt>
-      <dd>Does the bear case include a fully quantified downside in which the recommended-entry IRR is materially negative, with the revenue, margin, and exit-multiple drivers each explicit?</dd>
-      <dt>J-12 — Reverse-multiple sanity check</dt>
-      <dd>Has a reverse-P/E (or reverse-DCF) been run, and does the paper flag every assumption where the reverse-implied growth diverges materially from the central case?</dd>
-      <dt>J-14 — Evidence-based management assessment</dt>
-      <dd>Does the management read draw on at least two of operating history under stress, capital-allocation record, prior crisis behaviour, insider transactions, communication consistency?</dd>
-      <dt>J-21a — Engagement with public bear coverage</dt>
-      <dd>For names with public bear research, does the paper engage with the strongest published bear argument <em>by name and source</em>?</dd>
-      <dt>J-24 — Capital-structure stress test</dt>
-      <dd>Does the paper explicitly engage with debt-maturity profile, covenant headroom under bear, and the working-capital funding picture?</dd>
+      <dt>J-01 — Falsifiability of central thesis <span style="color:#2A7A3E;font-weight:600;">[passing canonically]</span></dt>
+      <dd>Tests whether thesis claims are stated with a falsifiable counter — a sentence of the form "X will reach Y by Z" the market can later mark you against.</dd>
+      <dt>J-02 — Evidence lineage <span style="color:#2A7A3E;font-weight:600;">[passing on CHYM]</span></dt>
+      <dd>Tests whether every load-bearing claim in the pack carries a source the verifier-pair can re-fetch. The Filings Reader and ADR-0014 carry most of the load here.</dd>
+      <dt>J-07 — Quantified negative-IRR scenario <span style="color:#B5651D;font-weight:600;">[dual-fail on CHYM and WISE]</span></dt>
+      <dd>Tests whether the bear case carries a fully quantified downside with revenue, margin and exit-multiple drivers each explicit. <em>v4 template does not yet require the negative-IRR scenario as a discrete table; v5 will.</em></dd>
+      <dt>J-12 — Reverse-multiple sanity check <span style="color:#B5651D;font-weight:600;">[dual-fail on CHYM and WISE]</span></dt>
+      <dd>Tests whether a reverse-P/E or reverse-DCF has been run and the implied-growth divergence flagged. <em>v4 template does not yet require the reverse-multiple back-out; v5 will.</em></dd>
+      <dt>J-14 — Evidence-based management assessment <span style="color:#2A7A3E;font-weight:600;">[passing on CHYM]</span></dt>
+      <dd>Tests whether the management read draws on operating history under stress, capital-allocation record, prior crisis behaviour, insider transactions, or communication consistency. The Org Reader's bench-depth analysis covers this when fully integrated into the pack.</dd>
+      <dt>J-21a — Engagement with public bear coverage <span style="color:#B5651D;font-weight:600;">[dual-fail on CHYM and WISE]</span></dt>
+      <dd>Tests whether the paper engages with the strongest published bear argument by name and source. <em>v4 template does not yet require an explicit "what the bears say" section; v5 will, with the Sentiment Reader's bear-report extract feeding it directly.</em></dd>
+      <dt>J-24 — Capital-structure stress test <span style="color:#B5651D;font-weight:600;">[dual-fail on CHYM and WISE]</span></dt>
+      <dd>Tests whether the paper engages with debt-maturity profile, covenant headroom under bear, and the working-capital funding picture. <em>v4 template does not yet require a discrete cap-structure stress; v5 will.</em></dd>
     </dl>
     <p style="margin-top:14px;font-size:14px;color:#4A4A4A;font-style:italic;">
-      Other dimensions in the roster: Peer-Set Selection, Evidence Lineage, Scenario Range, Disconfirming Evidence, Exit-Route Plausibility, Operational Capacity, Threat-Catalogue Coverage, Channel and Business-Model Fidelity, Base-Rate Calibration, Roster Freshness, Disclosure Inference.
+      Other dimensions in the roster: Peer-Set Selection, Scenario Range, Disconfirming Evidence, Exit-Route Plausibility, Operational Capacity, Threat-Catalogue Coverage, Channel and Business-Model Fidelity, Base-Rate Calibration, Roster Freshness, Disclosure Inference. The sample above mixes passing and failing judges deliberately — the failing ones are where v5 is being built next.
     </p>
   </div>
 
   <p>
-    The CHYM + WISE canary produced 128 judge verdicts at $11.80. The <em class="ink">aggregate pass rate was 43 per cent</em>. Fifteen judges failed for both companies under both models — structural, not idiosyncratic to one ticker. Ten are template-level gaps in the v4 IC Pack — J-04, J-07, J-11, J-12, J-19, J-20, J-21a/b, J-22a/b, J-23, J-24 — fixable by tightening the section writers' prompts. The other five are substrate-gated: J-09 needs an Approved Claims Library, J-05 a verified-comps store, J-16 a rolling twenty-paper Chronos retrospective baseline. None of those substrates exists yet; all are in the W12 backlog. The judges fail honestly until they are built.
+    The CHYM and WISE canary returned a <em class="ink">43 per cent aggregate pass rate</em> across 128 judge verdicts. That is not the judges working as designed — that is the v4 IC pack template incomplete in ten specific places, and the judges naming where. Of the fifteen judges that failed for both companies under both models, ten flag template gaps that v5 will fix: J-04, J-07, J-11, J-12, J-19, J-20, J-21a/b, J-22a/b, J-23, J-24. Five are substrate-gated and need infrastructure that does not yet exist — J-09 needs the Approved Claims Library, J-05 needs the VERIFIED_COMPS store, J-16 needs the Chronos rolling twenty-paper retrospective baseline — and those substrates are on the W12+ build queue. Partners should read the 43 per cent as the punch list for v5, not as v4's verdict on itself.
   </p>
 
   <div class="pullquote">
-    "Judges fail. That is the system working. The fail list is the punch-list for the next ticker, not a black mark on this one."
+    "The v4 IC pack format is, by Spock's own standards, incomplete in ten specific places. The CHYM pack ships with those gaps documented. v5 closes them."
   </div>
 
   <p>
@@ -880,7 +882,7 @@
   </p>
 
   <p>
-    What partners should do with the verdicts: read the fail list as the punch-list for the next ticker, not a black mark on this one. An aggregate pass rate is a maturity indicator for the pipeline, not a verdict on the company. 43 per cent today should be 60 in a month and 80 by the time the substrate layer lands; if it isn't, that is information about the build. The judges are deliberately disagreeable so that the failure modes show up in writing before they show up in the room.
+    What partners should do with the verdicts: read the fail list as the v5 punch list. The aggregate pass rate is a maturity indicator for the IC pack template, not a verdict on the company underneath it. 43 per cent today should be 60 once the ten template gaps are closed and 80 once the three substrates are built; if it is not, that is information about the build. The judges are deliberately disagreeable so the failure modes show up in writing before they show up in the room.
   </p>
 
   <!-- ===== HONEST CLOSE ===== -->
@@ -895,7 +897,11 @@
   </p>
 
   <p>
-    The pipeline is materially better today than it was on Monday. That is the only meaningful claim to make about a build of this kind. The aim is not perfection. The aim is that each ticker leaves Spock more competent than it started, and that each IC pack is an analytical view partners can challenge from a position of knowledge rather than having to do the source-gathering themselves.
+    By the numbers, for the canary that produced this memo: thirteen paired-agent runs on each ticker plus 128 judge verdicts cost $44.31 in API spend on the Gate 7 deep research and $11.80 on the judges — roughly $56 per ticker run end-to-end, excluding the human IC time at Gate 10. Wall-clock from Gate 6 PASS to IC pack distribution was approximately five days on the canary; the steady-state target is 72 hours once the v5 template gaps are closed. We do not have a track record yet. The CHYM IC paper is the first v4 ticker in front of the human IC. The honest stance is that v4 is producing partner-grade input today; whether the Spock view correlates with subsequent returns is a question for the post-IC follow-up over the next 24 months.
+  </p>
+
+  <p>
+    The pipeline is materially better today than it was a week ago — but that is the comparison to itself, not to the bar. The honest comparison to the bar is that v4 produces a reading pack denser and better-sourced than a competent junior analyst would assemble in a weekend with a Bloomberg terminal, with failure modes that are now documented rather than hidden. The aim is not perfection. The aim is that each ticker leaves Spock more competent than it started, and that each IC pack is an analytical view partners can challenge from a position of knowledge rather than having to do the source-gathering themselves.
   </p>
 
   <p>
