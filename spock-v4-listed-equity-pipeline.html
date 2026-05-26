@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How Spock v4 Builds an IC Paper — Chronos Memos</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #FAFAF8;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #1A1A1A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+  }
+
+  /* ===== Masthead ===== */
+  .masthead {
+    border-bottom: 2px solid #1A1A1A;
+    padding-bottom: 20px;
+    margin-bottom: 48px;
+  }
+  .masthead .pub {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #1A1A1A;
+    margin-bottom: 4px;
+  }
+  .masthead .issue {
+    font-size: 11px;
+    color: #6A6A6A;
+    letter-spacing: 0.06em;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    margin-bottom: 56px;
+  }
+  .hero .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #B5651D;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-size: 54px;
+    line-height: 1.04;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+    color: #1A1A1A;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: #5C4220;
+  }
+  .hero .deck {
+    font-size: 20px;
+    line-height: 1.45;
+    color: #3A3A3A;
+    max-width: 720px;
+    margin: 0 0 28px;
+    font-weight: 400;
+  }
+  .hero .byline {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: #6A6A6A;
+    letter-spacing: 0.04em;
+    border-top: 1px solid #E5E5E0;
+    padding-top: 16px;
+  }
+  .hero .byline strong {
+    color: #1A1A1A;
+    font-weight: 600;
+  }
+
+  /* ===== Body ===== */
+  h2.section-head {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    margin: 72px 0 12px;
+    color: #1A1A1A;
+  }
+  h2.section-head .num {
+    color: #B5651D;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  h2.section-head em {
+    font-style: italic;
+    color: #5C4220;
+  }
+  .section-deck {
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: #4A4A4A;
+    margin: 0 0 28px;
+    font-weight: 400;
+    max-width: 700px;
+  }
+  h3.sub-head {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 44px 0 8px;
+    color: #1A1A1A;
+  }
+  h3.sub-head .gate-tag {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #B5651D;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  h4.minor-head {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #B5651D;
+    margin: 28px 0 8px;
+  }
+  p {
+    font-size: 17px;
+    line-height: 1.72;
+    margin: 0 0 18px;
+    color: #2A2A2A;
+  }
+  p.lede::first-letter {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    font-size: 56px;
+    float: left;
+    line-height: 0.85;
+    padding: 4px 10px 0 0;
+    font-weight: 700;
+    color: #1A1A1A;
+  }
+  em.ink { color: #1A1A1A; font-style: normal; font-weight: 600; }
+  em.warm { color: #5C4220; font-style: italic; }
+
+  /* ===== Pull quotes ===== */
+  .pullquote {
+    margin: 36px 0;
+    padding: 22px 0;
+    border-top: 1px solid #1A1A1A;
+    border-bottom: 1px solid #1A1A1A;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 24px;
+    line-height: 1.35;
+    font-weight: 500;
+    color: #1A1A1A;
+    font-style: italic;
+    letter-spacing: -0.01em;
+  }
+
+  /* ===== Sidebar / Taxonomy ===== */
+  .sidebar {
+    background: #F4F2EC;
+    border-left: 3px solid #B5651D;
+    padding: 26px 28px;
+    margin: 40px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .sidebar .tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #B5651D;
+    margin-bottom: 10px;
+  }
+  .sidebar h4 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    color: #1A1A1A;
+    letter-spacing: -0.01em;
+  }
+  .sidebar p {
+    font-size: 15.5px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: #2A2A2A;
+  }
+  .sidebar p:last-child { margin-bottom: 0; }
+  .sidebar dl {
+    margin: 8px 0 0;
+  }
+  .sidebar dt {
+    font-weight: 700;
+    color: #1A1A1A;
+    margin-top: 12px;
+    font-size: 15px;
+  }
+  .sidebar dt:first-child { margin-top: 0; }
+  .sidebar dd {
+    margin: 4px 0 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #2A2A2A;
+  }
+
+  /* ===== Gate card ===== */
+  .gate {
+    border-top: 1px solid #E5E5E0;
+    padding: 28px 0 8px;
+  }
+  .gate .gate-meta {
+    font-size: 12px;
+    color: #6A6A6A;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 14px;
+    font-weight: 600;
+  }
+  .gate .gate-meta span + span::before {
+    content: "·";
+    margin: 0 10px;
+    color: #B5651D;
+  }
+
+  /* ===== Workstream list ===== */
+  .workstream {
+    border-top: 1px solid #ECECE8;
+    padding: 22px 0 4px;
+  }
+  .workstream:first-of-type { border-top: none; padding-top: 8px; }
+  .workstream .ws-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #B5651D;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .workstream h4 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: #1A1A1A;
+    letter-spacing: -0.01em;
+  }
+  .workstream p {
+    font-size: 16px;
+    line-height: 1.65;
+    margin: 0 0 12px;
+  }
+
+  /* ===== Verification layers ===== */
+  .layer {
+    border-top: 1px solid #E5E5E0;
+    padding: 22px 0 4px;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .layer .lnum {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: #B5651D;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .layer h4 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: #1A1A1A;
+    letter-spacing: -0.01em;
+  }
+  .layer p {
+    font-size: 16px;
+    line-height: 1.65;
+    margin: 0 0 10px;
+  }
+
+  /* ===== Stats / numbers ===== */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin: 32px 0;
+    padding: 24px 0;
+    border-top: 1px solid #E5E5E0;
+    border-bottom: 1px solid #E5E5E0;
+  }
+  .stat .num-big {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+  .stat .num-label {
+    font-size: 11px;
+    color: #6A6A6A;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* ===== Reading list ===== */
+  .reading {
+    border: 1px solid #E5E5E0;
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 22px 26px;
+    margin: 32px 0 12px;
+  }
+  .reading .tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #B5651D;
+    margin-bottom: 12px;
+  }
+  .reading a {
+    display: block;
+    color: #1A1A1A;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    border-bottom: 1px solid #ECECE8;
+    padding: 10px 0;
+  }
+  .reading a:last-child { border-bottom: none; }
+  .reading a:hover { color: #B5651D; }
+  .reading a span {
+    display: block;
+    font-size: 12px;
+    color: #6A6A6A;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin-top: 3px;
+  }
+
+  /* ===== Footer ===== */
+  .colophon {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 2px solid #1A1A1A;
+    font-size: 12px;
+    color: #6A6A6A;
+    line-height: 1.7;
+  }
+  .colophon strong { color: #1A1A1A; }
+
+  @media (max-width: 900px) {
+    .stat-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .page { padding: 36px 18px 50px; }
+    .hero h1 { font-size: 38px; }
+    .hero .deck { font-size: 17px; }
+    h2.section-head { font-size: 26px; }
+    .stat-strip { grid-template-columns: 1fr 1fr; }
+    .layer { grid-template-columns: 1fr; gap: 6px; }
+    .layer .lnum { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ===== MASTHEAD ===== -->
+  <div class="masthead">
+    <div class="pub">CHRONOS MEMOS</div>
+    <div class="issue">No. 04 · 26 May 2026 · Spock v4 — Listed-Equity Pipeline · ~10&nbsp;min read</div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="eyebrow">A Partner's Guide to the Machine</div>
+    <h1>How Spock&nbsp;v4 builds<br>an <em>IC paper</em>.</h1>
+    <p class="deck">
+      A partner's guide to the listed-equity pipeline — its gates, its agents, and the verification stack that catches the errors before you do.
+    </p>
+    <div class="byline">
+      <span><strong>Author</strong> · Roger Grobler, Chronos Capital</span>
+      <span><strong>Date</strong> · 26 May 2026</span>
+      <span><strong>Companion to</strong> · the CHYM IC Pack</span>
+    </div>
+  </div>
+
+  <!-- ===== OPENING ===== -->
+  <h2 class="section-head"><span class="num">01 · The lede</span>What this memo <em>is for</em>.</h2>
+  <p class="section-deck">
+    Chronos has been building an AI investment analyst. We call it Spock. The v4 listed-equity pipeline is the current generation — the machine that produced the CHYM reading pack you opened this morning and is preparing the next ten tickers in the partner queue. This memo explains how it works.
+  </p>
+
+  <p class="lede">
+    Not the code. The <em class="ink">architecture</em>. By the end of ten minutes you should know exactly which claims in a Spock IC pack to trust on first read, which claims to push back on, and where in the machine each kind of error gets caught — or doesn't. Spock is a serious instrument now, but it is not a black box and it should never be treated as one. The whole point of building it in the open is so that partners can interrogate it.
+  </p>
+
+  <p>
+    The architecture is simple to state. A ticker moves through five gates. At each gate, specific agents do specific work. Between gates, a verification stack of nine layered checks catches errors. The output at the end is two documents: a reading pack representing <em class="warm">Spock's analytical view</em>, and a Virtual IC brief representing the simulated deliberation of <em class="warm">Virtual Chronos</em>. Neither is the real Chronos vote. That happens in the room where you sit.
+  </p>
+
+  <p>
+    What follows is a walk gate by gate, then a walk through the verification stack. The honest lessons from the CHYM run — including the embarrassing ones — are part of the story, because they are where the credibility of the next ticker comes from. A pipeline that hides its failure modes is one you cannot trust. A pipeline that publishes them is one that has a chance of getting better.
+  </p>
+
+  <div class="stat-strip">
+    <div class="stat">
+      <div class="num-big">5</div>
+      <div class="num-label">Gates from screen to vote</div>
+    </div>
+    <div class="stat">
+      <div class="num-big">9</div>
+      <div class="num-label">Workstreams in deep research</div>
+    </div>
+    <div class="stat">
+      <div class="num-big">13</div>
+      <div class="num-label">Section writers in pack assembly</div>
+    </div>
+    <div class="stat">
+      <div class="num-big">9</div>
+      <div class="num-label">Verification layers</div>
+    </div>
+  </div>
+
+  <!-- ===== TAXONOMY SIDEBAR ===== -->
+  <div class="sidebar">
+    <div class="tag">A Note on Names</div>
+    <h4>Spock, Virtual Chronos, Chronos — three different things.</h4>
+    <dl>
+      <dt>Spock</dt>
+      <dd>The analytical pipeline. Its outputs are <em>"Spock's view"</em> — sourced, scored, and audited, but generated by a machine.</dd>
+      <dt>Virtual Chronos</dt>
+      <dd>The simulated IC panel. Its vote is the <em>"Virtual Chronos Vote"</em> — a dry run of the real IC, useful for stress-testing the pack, not binding on anyone.</dd>
+      <dt>Chronos</dt>
+      <dd>The firm. The real Chronos view emerges from the actual IC meeting where partners — Roger, Willem, Michael, Nic — debate, push back, and vote.</dd>
+    </dl>
+    <p style="margin-top:14px;font-size:14px;color:#4A4A4A;font-style:italic;">
+      The distinction matters. Don't quote "Spock thinks" in a partner-facing document and don't conflate the Virtual Chronos Vote with a real Chronos position. The taxonomy is load-bearing.
+    </p>
+  </div>
+
+  <!-- ===== GATE-BY-GATE ===== -->
+  <h2 class="section-head"><span class="num">02 · The five gates</span>How a ticker <em>moves through the machine</em>.</h2>
+  <p class="section-deck">
+    Each gate has a clear input, a clear output, and a clear handover. Compute is committed at gate boundaries, not before — so partner sign-off at Gate 6 PASS is what licenses the deep work in Gate 7.
+  </p>
+
+  <!-- ===== GATE 6 ===== -->
+  <div class="gate">
+    <h3 class="sub-head"><span class="gate-tag">Gate 6</span>Screening — the Tier-1 filter.</h3>
+    <p class="gate-meta"><span>Cadence: continuous, monthly review</span><span>Compute: light</span></p>
+    <p>
+      Gate 6 maps a defined universe — say, listed fintechs globally with market caps between $5B and $50B — and runs each ticker through a quality, valuation, sector-fit, and gating-question screen. The output is a clean PASS / PARK / FAIL for every name in the universe, with a short rationale on each.
+    </p>
+    <p>
+      The point of Gate 6 is to keep the analytical machinery focused on the ten to fifteen tickers that actually merit a deep dive at any one time. The screen is deliberately blunt: it asks whether the business looks like a Chronos thesis-fit at a glance, not whether it is one. A PASS does not endorse the company; it merely says <em class="ink">the partners should decide whether to spend Gate 7 compute on it</em>. Gate 7 costs roughly twenty-four to forty-eight hours of pipeline time per ticker, and the screen exists so we never commit that compute by accident.
+    </p>
+    <p>
+      The partner role at this gate is exactly one decision: PASS-to-Gate-7, yes or no, for each name. Everything downstream descends from that one signature. A PARK is reversible — the ticker comes back on the monthly review. A FAIL is documented with the reason so we do not relitigate the same screen every quarter.
+    </p>
+  </div>
+
+  <!-- ===== GATE 7 ===== -->
+  <div class="gate">
+    <h3 class="sub-head"><span class="gate-tag">Gate 7</span>Deep research — the analytical workhorse.</h3>
+    <p class="gate-meta"><span>Runs after Gate 6 PASS</span><span>24–48 hours per ticker</span><span>Nine workstreams</span></p>
+    <p>
+      This is where the bulk of the work happens. Nine workstreams run in coordinated sequence and in parallel where they can. Each one uses the same internal discipline: a drafter agent (Opus) produces the workstream output, a fact-checker agent (Sonnet) tags every load-bearing claim against primary sources, and the drafter revises on the basis of the tags. That cycle — drafter, verifier, revise — is the verifier-pair pattern formalised in ADR-0012 and applied uniformly across the pipeline.
+    </p>
+    <p>
+      Before the workstreams kick off, a small deterministic module runs the <em class="ink">IPO basics ingestion</em>: IPO date, IPO price, day-one market cap, current shares outstanding, current market cap. The data is pulled from SEC EDGAR for US tickers, FCA NSM for UK, HKEX for Hong Kong, with EODHD providing current state. This module exists in its present form because the CHYM run discovered Spock was filling IPO basics from session memory rather than primary sources. A four-day-stale share price made it through five edit rounds. The new module is deterministic, dated, and refuses to ratify a price older than the trading day.
+    </p>
+
+    <p>
+      The sequencing of the nine workstreams is intentional. Workstreams A through D establish the company on its own terms — what it is, how it competes, who runs it, what it is worth. Workstream E grounds the entire stack in primary documents, which is why it runs in parallel with A through D rather than after them; we want the disclosure language available when the qualitative workstreams form their views, not after. F, G and H sweep the consumer side, the sell side and the market side respectively. The red-flag synthesis runs last because its job is to look at every other workstream's output and notice what they collectively imply.
+    </p>
+
+    <p style="margin-top:24px;"><strong>The nine workstreams.</strong></p>
+
+    <div class="workstream">
+      <span class="ws-tag">Workstream A</span>
+      <h4>Company history and AI unit economics.</h4>
+      <p>
+        Two sub-agents. The history agent maps the founding insight, the structural pivots, the IPO chapter where applicable, and what the company is doing now. The AI economics agent places the company on the Spock AI Maturity framework — a five-level ladder where Level 1 is opportunistic AI use, Level 2 is operational AI, and Level 5 is a business model that could not exist without AI. The output is a verdict on whether the AI story shows up in the unit economics or only in the investor deck.
+      </p>
+    </div>
+
+    <div class="workstream">
+      <span class="ws-tag">Workstream B</span>
+      <h4>Moat, competitors, and voice of customer.</h4>
+      <p>
+        Three sub-agents. A competitor map locates the company in its space. A moat decomposition scores the durability of competitive advantages using the Spock <em>moat_index</em>, where 100 is sector median and the practical range is 50 to 150. A voice-of-customer pass mines product forums — Reddit, Trustpilot product pages, PissedConsumer — for what users actually say about the product, not what management says about the product.
+      </p>
+    </div>
+
+    <div class="workstream">
+      <span class="ws-tag">Workstream C</span>
+      <h4>People and culture.</h4>
+      <p>
+        CEO bio. C-suite roster with bio-gap flags where public information is thin. Board composition with governance flags — dual-class share structures, committee concentration, the presence or absence of an AI-specialist director. Glassdoor mining for cultural signal. A bench-depth verdict on whether the second line of management is real or notional, and a separate key-person-risk read on whether the thesis depends on one human being.
+      </p>
+    </div>
+
+    <div class="workstream">
+      <span class="ws-tag">Workstream D</span>
+      <h4>Valuation, built bespoke.</h4>
+      <p>
+        Peer comparables, a reverse-multiple sanity check that asks what growth the market is pricing in, scenario analysis across bull, base and bear cases with a weighted IRR, a year-by-year build, an exit-route assessment, and an entry-price recommendation expressed as starter, full, and avoid bands. The valuation is not a template overlay; it is built from the workstream A and B findings each time. A template would smuggle in assumptions that no one notices.
+      </p>
+    </div>
+
+    <div class="workstream">
+      <span class="ws-tag">Workstream E</span>
+      <h4>Primary documents.</h4>
+      <p>
+        Routes by exchange. US tickers go to SEC EDGAR for the 10-K, 10-Qs, 8-Ks and the S-1 / amendments where the IPO is recent. UK tickers go to the FCA's National Storage Mechanism and Investegate. Hong Kong tickers go to HKEX. Two sub-agents do the work: a primary-filings agent synthesises the annual and quarterly disclosures; an earnings-transcripts agent works through the last four quarters of management calls. The output is what management has actually said, on record, with citations.
+      </p>
+    </div>
+
+    <div class="workstream">
+      <span class="ws-tag">Workstream F</span>
+      <h4>Community intelligence — the consumer side.</h4>
+      <p>
+        The signal from the customer end of the business. BBB complaint analysis. CFPB enforcement database for US tickers. Trustpilot. PissedConsumer. Mainstream-press coverage of customer experience. This workstream is deliberately consumer-facing — it tells you what is happening at the user end of the funnel, not at the market end of the order book.
+      </p>
+    </div>
+
+    <div class="workstream">
+      <span class="ws-tag">Workstream G</span>
+      <h4>Analyst coverage — the sell side.</h4>
+      <p>
+        The Street's picture of the company. All published analyst reports we can access, consensus targets, the rating distribution, and a gap analysis: what is the sell side asking, and just as importantly, what is it <em class="ink">not</em> asking. The latter is often where the alpha lives.
+      </p>
+    </div>
+
+    <div class="workstream">
+      <span class="ws-tag">Workstream H</span>
+      <h4>Investor sentiment — the market side.</h4>
+      <p>
+        Reddit's r/wallstreetbets, r/stocks, r/investing and r/SecurityAnalysis threads. StockTwits sentiment. Short-seller coverage from Hindenburg, Muddy Waters, Spruce Point, Citron, Wolfpack, Kerrisdale. Options-flow narratives. Short-interest dynamics. This workstream was <em class="ink">added to the pipeline this week</em>. The CHYM run revealed that Workstream F's consumer focus was leaving a real gap on investor-side sentiment, and a gap is not something you patch with a paragraph at the end. It needs its own workstream with its own sources.
+      </p>
+    </div>
+
+    <div class="workstream">
+      <span class="ws-tag">Cross-cutting</span>
+      <h4>Red flags — the synthesis pass.</h4>
+      <p>
+        A final pass across all eight workstreams that pattern-matches against a 104-flag catalogue spanning operational, regulatory, accounting, governance and disclosure categories. The output is a structured red-flag list with severity tags (HIGH / MEDIUM / LOW) and a set of IC discussion items. Some red flags come from a single workstream; the most important ones come from two workstreams quietly disagreeing.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== GATE 8 ===== -->
+  <div class="gate">
+    <h3 class="sub-head"><span class="gate-tag">Gate 8</span>IC pack assembly.</h3>
+    <p class="gate-meta"><span>12–24 hours after Gate 7</span><span>13 section writers</span><span>Mechanical and completeness audits</span></p>
+    <p>
+      Thirteen section writers compose the final IC reading pack from the workstream outputs. The mechanical invariants check runs at this gate: shares outstanding × current price must equal stated market cap; the weighted IRR must equal the probability-weighted sum of the scenario returns; the analyst rating buckets must sum to the total coverage count. These are the dumb arithmetic checks that should always pass and which, on the CHYM run, did not.
+    </p>
+    <p>
+      A completeness audit runs alongside. It verifies that every workstream's findings actually landed in the document, using heuristic phrase-matching and an optional Sonnet-assisted semantic coverage pass. This check exists because the CHYM run silently dropped the People and Culture findings, the voice-of-customer paragraphs, the scenario derivation tables and several structured red flags across five edit rounds. Each iteration looked fine in isolation. The completeness audit looks at iterations against each other.
+    </p>
+    <p>
+      The output of Gate 8 is the partner reading material — Spock's view of the investment thesis, with supporting evidence, structured for a forty-five-minute partner read.
+    </p>
+  </div>
+
+  <!-- ===== GATE 9 ===== -->
+  <div class="gate">
+    <h3 class="sub-head"><span class="gate-tag">Gate 9</span>Virtual IC.</h3>
+    <p class="gate-meta"><span>6–12 hours after Gate 8</span><span>4 partners + 3 external experts</span><span>Independent reads, independent votes</span></p>
+    <p>
+      A simulated panel — four Chronos partner personas plus three external domain experts (a banking specialist, a fintech growth investor, a credit-risk specialist for credit-heavy theses, swapped per sector). Each panel member reads the IC pack independently. Each votes independently. Then Spock writes the minutes.
+    </p>
+    <p>
+      The Virtual IC document reads like a meeting transcript: partner views, debate moments where the panel divided, a vote tally, and a verdict descriptor. The CHYM Virtual IC came in at <em>3 YES / 4 NO / 0 ABSTAIN — WATCH NOT BUY</em>, which is exactly the kind of nuance the format is designed to produce. A simple PASS / FAIL would have flattened a genuinely interesting disagreement.
+    </p>
+    <p>
+      The Virtual Chronos Vote is not the real Chronos vote. It is a dry run. Its job is to stress-test the IC pack before the real meeting: if Spock cannot persuade a simulated panel that includes friendly priors, the real panel is unlikely to be persuaded either.
+    </p>
+  </div>
+
+  <!-- ===== GATE 10 ===== -->
+  <div class="gate">
+    <h3 class="sub-head"><span class="gate-tag">Gate 10</span>Human IC.</h3>
+    <p class="gate-meta"><span>Scheduled partner meeting</span><span>The real vote</span></p>
+    <p>
+      Partners arrive at the meeting having read the IC pack and the Virtual IC brief. They debate, push back on Spock's view where they disagree with it, and commit a real Chronos position. The Virtual IC brief is meant to make the real meeting <em class="ink">sharper, not shorter</em>. Partners arrive primed with the disagreements the simulated panel surfaced; they do not arrive having delegated their judgment.
+    </p>
+  </div>
+
+  <!-- ===== PULL QUOTE ===== -->
+  <div class="pullquote">
+    "The aim is not to replace partner judgment. The aim is to deliver partners a thoroughly-sourced analytical view they can challenge from a position of knowledge — not a position of having to do the source-gathering themselves."
+  </div>
+
+  <!-- ===== VERIFICATION STACK ===== -->
+  <h2 class="section-head"><span class="num">03 · The verification stack</span>What <em>catches errors</em>.</h2>
+  <p class="section-deck">
+    This is the load-bearing section. A pipeline that generates partner-grade analysis is only as good as the layers that catch its mistakes. Nine layers, each catching a different class of error. None is perfect on its own. They work because they overlap.
+  </p>
+  <p>
+    The mental model worth carrying is this: each layer is built for a specific failure mode that has actually occurred. Nothing in the stack is theoretical. The verifier-pair exists because drafter agents drift toward fluency at the expense of accuracy. The mechanical invariants exist because arithmetic errors propagate silently across sections. The cold read exists because a verifier can certify every claim in a document and still leave the document with a hole in it. Every layer is a scar.
+  </p>
+
+  <div class="layer">
+    <div class="lnum">1</div>
+    <div>
+      <h4>The verifier-pair (ADR-0012).</h4>
+      <p>
+        Every drafter output from Opus is fact-checked by a Sonnet agent that tags each load-bearing claim T1 (primary source), T2 (secondary source), inference (analyst reasoning), or unverified. The drafter then revises on the basis of those tags. The drafter wants to be coherent; the verifier only cares whether claims are true. That tension does most of the heavy lifting against drafter drift.
+      </p>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="lnum">2</div>
+    <div>
+      <h4>Primary-source grounding of the verifier itself.</h4>
+      <p>
+        Added this week. The verifier's source-of-truth blocks must themselves carry primary-source citations. If the orchestrator hands the verifier a wrong reference number, the verifier will happily ratify the wrong answer — exactly what happened on the CHYM share-price chain. The fix: every load-bearing fact in a verifier prompt must carry a SEC EDGAR URL, a company IR page, a Reuters or Bloomberg link, or equivalent. No source, no ratification.
+      </p>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="lnum">3</div>
+    <div>
+      <h4>Mechanical invariants.</h4>
+      <p>
+        Automated arithmetic checks before publication. Shares × price = market cap. Σ(probability × return) = weighted IRR. Analyst rating buckets sum to total count. Boring, deterministic, fast. These caught the CHYM market-cap inconsistency — $17.80 × 381M shares is $6.78B, not the $9.8B that had propagated through three sections — and the IRR drift from 14.4% to 14.1% across two scenario tables.
+      </p>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="lnum">4</div>
+    <div>
+      <h4>The completeness audit.</h4>
+      <p>
+        Verifies that every workstream's findings actually appear in the final IC pack. Catches the silent dropping of content across draft iterations — the failure mode where each version looks complete in isolation but a paragraph from version three has quietly vanished by version seven. On CHYM this caught the People and Culture findings, the voice-of-customer extracts, the scenario derivation tables and three structured red flags. All recovered automatically.
+      </p>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="lnum">5</div>
+    <div>
+      <h4>Cross-workstream red flags.</h4>
+      <p>
+        Pattern-matching across the eight workstreams for inconsistencies, contradictions, or convergent signals. The most important finding in a deep dive often emerges from two workstreams disagreeing — the earnings call saying one thing and the consumer complaints saying another, or the analyst consensus saying one thing and the short interest saying another. The synthesis pass is built to notice that.
+      </p>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="lnum">6</div>
+    <div>
+      <h4>External audits.</h4>
+      <p>
+        For the most contested claims, the IC pack is run through external Deep Research — ChatGPT, Gemini, Grok, Claude in fresh sessions. Agreements and disagreements across the four runs are consolidated into a separate audit document; the load-bearing claims are then verified against primary sources. Used this week on the CHYM Bancorp / Durbin dependency, which is the single largest structural risk in the thesis. Four external auditors disagreed materially with Spock's framing. The IC pack was revised before publication.
+      </p>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="lnum">7</div>
+    <div>
+      <h4>Anti-fabrication discipline (ADR-0014).</h4>
+      <p>
+        Spock cannot claim primary-source citations it did not actually read. If a claim carries a [T1] tag in the workstream output, the verifier confirms the URL was fetched in the same session and that the fetched content supports the claim. The fabricated buffer figure that propagated through five CHYM edit rounds before external audit caught it is the exact failure ADR-0014 is built to prevent. The discipline is now enforced at write-time.
+      </p>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="lnum">8</div>
+    <div>
+      <h4>Standing rules in memory.</h4>
+      <p>
+        A small but accumulating set of rules captured as the pipeline matures. Every date in a partner document must trace to a verified external anchor — no invented deadlines. No process notes in partner-facing documents — no version labels, no internal changelog callouts. All partners are "Partner," not "Founding Partner." The Spock / Virtual Chronos / Chronos taxonomy. Each rule is in memory because a specific failure made it necessary. The rules are non-negotiable for the same reason.
+      </p>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="lnum">9</div>
+    <div>
+      <h4>The cold read.</h4>
+      <p>
+        Added this week. After the document is built, a final agent reads it in the voice of a specific partner who has not been involved in production, answering five questions. Did I get the insights I needed? Do I understand the business? Have my questions been answered? What hasn't been answered? What work could have been done that wasn't? The CHYM run used this in the voice of Nic Kohler, the partner least involved in the build. The cold read surfaced two structural gaps the verifier-pair had missed because they were not factual errors — they were absences.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== HONEST CLOSE ===== -->
+  <h2 class="section-head"><span class="num">04 · An honest close</span>What works, <em>what doesn't yet</em>.</h2>
+
+  <p>
+    v4 is a real machine. It produces partner-grade analytical output in three to five days per ticker, with a verification stack that is layered, deliberate, and improving each cycle. The CHYM pack you opened this morning is the artefact of nine workstreams, thirteen section writers, fifteen rounds of verifier-pair revision, four external audits and a cold read in Nic's voice.
+  </p>
+
+  <p>
+    It is also not perfect. The two largest catches this week were embarrassing in different ways. The share-price chain-of-errors — a four-day-stale price ratified by a verifier whose own source-of-truth block carried no citation — was an architectural failure, now fixed with the deterministic IPO basics module and primary-source grounding of verifier prompts. The fabricated capital buffer figure that propagated through five edit rounds before external audit caught it was an anti-fabrication failure, now caught at write-time by ADR-0014 enforcement. Neither failure happens again on the next ticker. The next ticker will fail in a different way, and the next layer of the verification stack will be built for that one.
+  </p>
+
+  <p>
+    The pipeline is materially better today than it was on Monday. That is the only meaningful claim to make about a build of this kind. The aim is not perfection. The aim is that each ticker leaves Spock more competent than it started, and that each IC pack delivered to partners is the kind of analytical view you can challenge from a position of knowledge rather than from a position of having to do the source-gathering yourselves.
+  </p>
+
+  <p>
+    There is one cultural risk worth naming. A pipeline that delivers a polished, sourced, scored document is one a busy partner could be tempted to accept on the strength of its appearance. The whole point of publishing the architecture in a memo like this one is to make that temptation harder. You should read the IC pack knowing where every claim came from, which layer of the verification stack signed off on it, and where the stack has historically failed. The stack is not infallible. The partner read is the last layer, and it cannot be delegated.
+  </p>
+
+  <p>
+    If the verifier-pair fails, the mechanical invariants catch the arithmetic. If those pass, the completeness audit catches the silent drops. If the silent drops slip through, the external audits catch the contested claims. If the external audits agree, the cold read catches the absences. The stack is layered because no single layer is sufficient, and because the right answer to "what catches the next class of error" is to add a layer, not to claim the existing ones are infallible.
+  </p>
+
+  <div class="reading">
+    <div class="tag">Reading alongside this memo</div>
+    <a href="https://rogergrobler.github.io/chronos-memos/chym-ic-reading-pack-26-may-2026.html">
+      The CHYM IC Reading Pack — 26 May 2026
+      <span>Spock's analytical view, in full, with workstream outputs and verifier tags.</span>
+    </a>
+    <a href="https://rogergrobler.github.io/chronos-memos/chym-virtual-ic-26-may-2026.html">
+      The CHYM Virtual IC Brief — 26 May 2026
+      <span>Virtual Chronos minutes: 3 YES / 4 NO / 0 ABSTAIN — WATCH NOT BUY.</span>
+    </a>
+  </div>
+
+  <!-- ===== COLOPHON ===== -->
+  <div class="colophon">
+    <p>
+      <strong>Chronos Memos · No. 04</strong> — written and published by Roger Grobler, Chronos Capital, on 26 May 2026. Companion to the CHYM IC Reading Pack and Virtual IC Brief published the same day. This document describes the Spock v4 listed-equity pipeline as of the CHYM run; the architecture continues to evolve with each ticker.
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>
