@@ -569,7 +569,7 @@
       <span class="ws-tag">Agent 01</span>
       <h4>The Historian <code class="ident">company-history</code></h4>
       <p>
-        Reads S-1 prospectus and amendments where the IPO is recent, the founder-letter archive, the first three annual reports post-listing, and management interviews going back to founding. Produces a six-paragraph corporate history covering founding insight, structural pivots, IPO chapter, current twelve-month state, and the open strategic questions the next four quarters will resolve. Paired with the Fact-Checker on dates, named transactions, and capital-raising events. Most common failure mode: filling pre-IPO history from session memory when the S-1 has not been retrieved.
+        The Historian works from the S-1 prospectus and amendments where the IPO is recent, the founder-letter archive, the first three annual reports post-listing, and management interviews going back to founding. Its output is a six-paragraph corporate history — founding insight, structural pivots, IPO chapter, current twelve-month state, and the open strategic questions the next four quarters will resolve. The Fact-Checker pairs with it on dates, named transactions, and capital-raising events. The failure mode the team watches for: filling pre-IPO history from session memory when the S-1 has not actually been retrieved.
       </p>
     </div>
 
@@ -577,7 +577,7 @@
       <span class="ws-tag">Agent 02</span>
       <h4>The AI Economist <code class="ident">ai-unit-economics</code></h4>
       <p>
-        Reads product disclosures, capex line items, R&amp;D-headcount mix, gross-margin trajectory, and explicit AI references in earnings calls. Produces a level assignment on the Spock AI Maturity framework (Level 1 opportunistic use through Level 5 model-as-business), with citations for each evidence point, and a verdict on whether AI is load-bearing or decorative in the unit economics. Paired with the Fact-Checker on capex disclosures, margin-line items, and headcount counts. Most common failure mode: scoring high on management-narrative density when the financial footprint is small.
+        The AI Economist reads product disclosures, capex line items, the R&amp;D-to-headcount mix, the gross-margin trajectory, and explicit AI references in earnings calls. It assigns a level on the Spock AI Maturity framework — Level 1 opportunistic use through Level 5 model-as-business — citing each evidence point, and delivers a single verdict: is AI load-bearing in the unit economics, or is it decorative. The Fact-Checker pairs on capex disclosures, margin lines, and headcount counts. The failure mode: scoring high on management-narrative density when the financial footprint is small.
       </p>
     </div>
 
@@ -587,7 +587,7 @@
       <span class="ws-tag">Agent 03</span>
       <h4>The Cartographer <code class="ident">competitor-analysis</code></h4>
       <p>
-        Reads competitor 10-Ks and equivalents, sector trade press, regulatory filings touching market structure, and the company's own competitor disclosures. Maps direct rivals and adjacent threats, decomposes the moat across switching costs, network effects, scale economies, regulatory positioning, and proprietary data using the Spock <em>moat_index</em> (100 = sector median; range 50–150), and runs a three-year competitive war-game on the top three rivals. Paired with the Fact-Checker on competitor financials and market-share claims. Most common failure mode: scoring moat components without naming the specific evidence anchor.
+        The Cartographer maps the competitive universe, decomposes the moat into named components, and runs the war-game. Its sources are competitor filings and equivalents, sector trade press, regulatory filings touching market structure, and the company's own competitor disclosures. The output is a Spock <em>moat_index</em> on the 100-equals-median scale, scored across the Helmer 7 Powers — scale economies, network economies, counter-positioning, switching costs, branding, cornered resource, and process power — each with its own evidence requirement; a competitive map with substitutes explicitly named; and, for each named direct competitor, a war-game hypothesising the structurally rational response (match, acquire, or ignore) at 5 per cent, 15 per cent, and 30 per cent share captured by the target. The Fact-Checker pairs on every named competitor and every quantified moat component. The failure mode: missing a non-obvious competitor, or under-weighting a structurally similar substitute.
       </p>
     </div>
 
@@ -595,7 +595,7 @@
       <span class="ws-tag">Agent 04</span>
       <h4>The Customer Listener <code class="ident">voice-of-customer</code></h4>
       <p>
-        Reads Reddit product threads, Trustpilot product pages, PissedConsumer complaint flow, and forum content where users discuss the product in their own words. Produces a structured read on product-level signal, weighted by specificity — a complaint naming a workflow failure counts more than a generic one-star — with raw extracts preserved for the IC pack. Paired with the Fact-Checker on volume claims and on management's stated complaint-resolution metrics. Most common failure mode: under-weighting low-volume but high-specificity threads in favour of aggregate star ratings.
+        The Customer Listener works the open forums: Reddit product threads, Trustpilot product pages, PissedConsumer complaint flow, and any forum content where users discuss the product in their own words. The output is a structured read on product-level signal, weighted by specificity — a complaint naming a workflow failure counts more than a generic one-star — with raw extracts preserved for the IC pack. The Fact-Checker pairs on volume claims and on management's stated complaint-resolution metrics. The failure mode: under-weighting low-volume but high-specificity threads in favour of aggregate star ratings.
       </p>
     </div>
 
@@ -605,7 +605,7 @@
       <span class="ws-tag">Agent 05</span>
       <h4>The Org Reader <code class="ident">people-and-culture</code></h4>
       <p>
-        Reads the proxy statement, biographies on company IR pages, LinkedIn profiles for the named executive officers and direct reports, board-committee charters, and Glassdoor reviews of the company. Produces a CEO read with public-trace cross-checks, a C-suite roster with bio-gap flags, a board-composition read with governance flags (dual-class, committee concentration, AI-specialist coverage), and a bench-depth verdict with key-person-risk attached. Paired with the Fact-Checker on tenure, prior-role and board-committee assertions. Most common failure mode: treating thin public information on a named executive as a neutral signal rather than as a flag.
+        The Org Reader pulls the proxy statement, IR-page biographies, LinkedIn profiles for the named executive officers and their direct reports, board-committee charters, and Glassdoor reviews. The outputs are four: a CEO read with public-trace cross-checks, a C-suite roster with bio-gap flags, a board-composition read with governance flags (dual-class, committee concentration, AI-specialist coverage), and a bench-depth verdict with key-person-risk attached. The Fact-Checker pairs on tenure, prior-role, and board-committee assertions. The failure mode: treating thin public information on a named executive as a neutral signal — when in fact the absence is the signal.
       </p>
     </div>
 
@@ -615,7 +615,7 @@
       <span class="ws-tag">Agent 06</span>
       <h4>The Valuer <code class="ident">valuation-bespoke</code></h4>
       <p>
-        Reads the Gate 4 financial extract, the Historian's narrative, the Cartographer's moat read, peer-set financials, and the analyst consensus assembled by the Street Reader. Produces peer multiples on revenue, earnings, and growth-adjusted bases; a reverse-multiple sanity check; bull / base / bear scenarios with explicit driver tables and a probability-weighted IRR; a year-by-year operating model; an exit-route read; and an entry-price recommendation in starter / full / avoid bands. Paired with the Fact-Checker on every financial input. Most common failure mode: peer-set drift — lazy sector buckets substituted for genuine comparability.
+        The Valuer turns the analytical picture into a number. It works from the Gate 4 financial extract, the Historian's narrative, the Cartographer's moat read, the peer-set financials, and the analyst consensus assembled by the Street Reader. The output is dense: current multiples on a fully-diluted basis with twelve-month price-performance context; five-to-fifteen named peer comparables with an explicit Why-Comparable rationale; a reverse-multiple sanity check that solves backwards for the embedded revenue CAGR, margin, and exit multiple implied by today's price; bull, base, and bear scenarios with explicit driver tables and IRR tables for the bull and bear cases; a named exit-route precedent with transaction date and headline multiple; and an entry-price recommendation in starter, full, or avoid-above bands. The Fact-Checker pairs on every financial input. The failure mode is peer-set drift — lazy sector buckets substituted for genuine comparability.
       </p>
     </div>
 
@@ -625,7 +625,7 @@
       <span class="ws-tag">Agent 07</span>
       <h4>The Filings Reader <code class="ident">primary-filings</code></h4>
       <p>
-        Reads, by exchange: SEC EDGAR (10-K, 10-Q, 8-K, S-1 and amendments) for US tickers; FCA NSM and Investegate for UK; HKEX for Hong Kong. Produces a synthesised primary-disclosure read covering risk factors, segment economics, related-party transactions, off-balance-sheet items, and material-event flow, each citation linked to the source URL. Paired with the Fact-Checker as the source-of-truth fallback for every other agent — claims that conflict with this output are flagged for revision. Most common failure mode: missing material 8-K or interim disclosure when the agent runs against a stale ingestion window.
+        The Filings Reader works the primary record exchange by exchange — SEC EDGAR (10-K and 10-Q) for US tickers, FCA NSM and Investegate hint URLs for UK, HKEX for Hong Kong. The output is a synthesised primary-disclosure read covering the EPS note, capital structure, risk factors, audit concerns, related-party transactions, and management discussion themes, each citation linked to its source URL. This is the source-of-truth fallback for the rest of the agent stack: when another agent's claim conflicts with the Filings Reader's output, the Fact-Checker flags it for revision. The failure mode: missing a material interim disclosure when the agent runs against a stale ingestion window.
       </p>
     </div>
 
@@ -633,7 +633,7 @@
       <span class="ws-tag">Agent 08</span>
       <h4>The Transcript Analyst <code class="ident">earnings-transcripts</code></h4>
       <p>
-        Reads the last four quarters of earnings-call transcripts and the corresponding prepared-remarks and Q&amp;A sections. Produces a structured tagging of management posture quarter-over-quarter: hedges, guidance deltas, unanswered analyst questions, and the explicit re-baselining of any prior commitment. Output feeds the Red-Flag Synthesizer directly. Paired with the Fact-Checker on quoted figures and on tenure of any specific guidance commitment. Most common failure mode: paraphrasing management language into something cleaner than the original — losing the hedge that was the actual signal.
+        The Transcript Analyst reads the last four quarters of earnings-call transcripts — prepared remarks and Q&amp;A both — and tags management posture quarter over quarter: hedges, guidance deltas, unanswered analyst questions, and the explicit re-baselining of any prior commitment. The output feeds the Red-Flag Synthesizer directly. The Fact-Checker pairs on quoted figures and on the tenure of any specific guidance commitment. The failure mode is subtle: paraphrasing management language into something cleaner than the original, and losing the hedge that was the actual signal.
       </p>
     </div>
 
@@ -643,7 +643,7 @@
       <span class="ws-tag">Agent 09</span>
       <h4>The Community Auditor <code class="ident">community-intelligence</code></h4>
       <p>
-        Reads Better Business Bureau complaints with severity tags, Trustpilot at the company level, PissedConsumer unmoderated flow, and — for US tickers — the CFPB enforcement database. Mainstream-press coverage of customer experience completes the source set. Produces a verdict on whether what the customer sees matches what management says the customer sees, with step-change flags in complaint volume and any unflagged enforcement actions named explicitly. Paired with the Fact-Checker on enforcement-action citations. Most common failure mode: failing to date the complaint set, so a step-change is washed out across years.
+        The Community Auditor pulls Reddit and community-forum discussion via Perplexity search and — for US tickers — the public CFPB consumer-complaints API directly. The verdict it returns is whether what the customer sees matches what management says the customer sees, with step-change flags in complaint volume and any recurring complaint themes named explicitly. The Fact-Checker pairs on complaint-volume figures. The failure mode: failing to date the complaint set, so a step-change is washed out across years.
       </p>
     </div>
 
@@ -653,7 +653,7 @@
       <span class="ws-tag">Agent 10</span>
       <h4>The Street Reader <code class="ident">analyst-coverage</code></h4>
       <p>
-        Reads every accessible sell-side analyst report on the ticker, the consensus price target and rating distribution, and the public commentary trail around analyst-day events. Produces the buy / hold / sell breakdown, the consensus price-target read, and — the part that does most of the work — a gap analysis naming which questions the sell side is <em class="ink">not</em> asking, where consensus is anchored to a number not re-derived in two quarters, and where the bull case rests on a single covered analyst. Paired with the Fact-Checker on rating-distribution counts. Most common failure mode: equal-weighting reports that draw from the same management-day script.
+        The Street Reader pulls every accessible sell-side analyst report on the ticker, the consensus price target and rating distribution, and the public commentary trail around analyst-day events. The buy / hold / sell breakdown and the consensus price-target read are the easy part. The part that does most of the work is the gap analysis: which questions the sell side is <em class="ink">not</em> asking, where consensus is anchored to a number not re-derived in two quarters, and where the bull case rests on a single covered analyst. The Fact-Checker pairs on rating-distribution counts. The failure mode: equal-weighting reports that draw from the same management-day script.
       </p>
     </div>
 
@@ -663,7 +663,7 @@
       <span class="ws-tag">Agent 11</span>
       <h4>The Sentiment Reader <code class="ident">investor-sentiment</code></h4>
       <p>
-        Reads r/wallstreetbets, r/stocks, r/investing, r/SecurityAnalysis and StockTwits; published short-seller reports from Hindenburg, Muddy Waters, Spruce Point, Citron, Wolfpack and Kerrisdale; options-flow commentary; short-interest dynamics and cost-to-borrow data. Produces a structured investor-side sentiment read, with named bear arguments cited by source and any short-interest step-changes flagged. <em class="ink">Added to the pipeline this week</em> after the CHYM run showed the Customer Listener's consumer focus left investor sentiment uncovered. Paired with the Fact-Checker on short-interest figures and on direct quotes from published bear reports. Most common failure mode: paraphrasing a published bear thesis without engaging the specific claim.
+        The Sentiment Reader covers the investor-side noise the Customer Listener does not: r/wallstreetbets, r/stocks, r/investing, r/SecurityAnalysis and StockTwits; published short-seller reports from Hindenburg, Muddy Waters, Spruce Point and Citron; and lockup-expiry, insider-selling, options-flow and short-interest commentary. It returns a structured sentiment read with named bear arguments cited by source and any short-interest step-changes flagged. <em class="ink">Added to the pipeline this week</em> after the CHYM run showed the Customer Listener's consumer focus left investor sentiment uncovered. The Fact-Checker pairs on short-interest figures and on direct quotes from published bear reports. The failure mode: paraphrasing a published bear thesis without engaging the specific claim.
       </p>
     </div>
 
@@ -673,7 +673,7 @@
       <span class="ws-tag">Agent 12</span>
       <h4>The Red-Flag Synthesizer <code class="ident">red-flags</code></h4>
       <p>
-        Reads the structured outputs of Agents 01 through 11 together, pattern-matching against the canonical 86-flag catalogue across eleven categories — operational, regulatory, accounting, governance, disclosure and others. Produces a structured red-flag list with HIGH / MEDIUM / LOW severity tags and a set of explicit IC discussion items. Single-agent flags (a hedge in transcripts, a CFPB action in community signal) are tagged at source; cross-agent flags (earnings call versus consumer complaints; analyst consensus versus short interest) are surfaced as their own category. Paired with the Fact-Checker on every flag's evidence link. Most common failure mode: down-weighting a cross-agent signal because no single agent flagged it independently.
+        The Red-Flag Synthesizer runs last, because its inputs are the structured outputs of Agents 01 through 11 read together. It pattern-matches against the canonical 86-flag catalogue across eleven categories — operational, regulatory, accounting, governance, disclosure and others — and returns a structured red-flag list with HIGH, MEDIUM, and LOW severity tags plus a set of explicit IC discussion items. Single-agent flags (a hedge in transcripts, a CFPB action in community signal) are tagged at source; cross-agent flags (earnings call versus consumer complaints; analyst consensus versus short interest) are surfaced as their own category. The Fact-Checker pairs on every flag's evidence link. The failure mode: down-weighting a cross-agent signal because no single agent flagged it independently.
       </p>
     </div>
 
@@ -683,7 +683,7 @@
       <span class="ws-tag">Agent 13</span>
       <h4>The Fact-Checker <code class="ident">fact-checker</code></h4>
       <p>
-        Reads each drafter agent's output paired with its source-of-truth block, the primary-source URLs cited in that block, and the standing rules in operating memory. Produces a tagging of every load-bearing claim as T1 (primary source), T2 (secondary), inference, or unverified — the drafter revises on the tags. Runs the ADR-0012 verifier-pair discipline one-to-one against each of the twelve generative agents. The verifier's own source-of-truth block must itself carry primary-source citations, a discipline added this week after the CHYM IPO-basics chain showed what happens when it does not. Most common failure mode: ratifying a confidently-stated source-of-truth that was never grounded in a fetched URL.
+        The Fact-Checker reads each drafter agent's output paired with its source-of-truth block, the primary-source URLs cited in that block, and the standing rules in operating memory. Every load-bearing claim is tagged T1 (primary source), T2 (secondary), inference, or unverified, and the drafter revises on the tags. This is the ADR-0012 verifier-pair discipline running one-to-one against each of the twelve generative agents. One discipline was added this week after the CHYM IPO-basics chain: the verifier's own source-of-truth block must itself carry primary-source citations. Without that, the verifier ratifies whatever it is handed. The failure mode the new discipline addresses: ratifying a confidently-stated source-of-truth that was never grounded in a fetched URL.
       </p>
     </div>
   </div>
@@ -816,7 +816,7 @@
     <div>
       <h4>Standing rules in operating memory — institutional discipline.</h4>
       <p>
-        Not a verification mechanism in the sense of the other layers — this one is the rule, not the verifier of the rule. A small accumulating set of standing instructions captured as the pipeline matures: every date in a partner document must trace to a verified external anchor; no version labels or internal changelog callouts in partner-facing documents; all Chronos partners are "Partner," not "Founding Partner"; the Spock / Virtual Chronos / Chronos taxonomy is load-bearing. Each rule is in operating memory because a specific failure made it necessary. The mechanism that catches violations of these rules is the cold read (Layer 9) and the partner read at Gate 10.
+        Not a verification mechanism in the same sense as the others. This layer is the rule, not the verifier of the rule. As the pipeline matures, a small set of standing instructions accumulates in operating memory — every date in a partner document must trace to a verified external anchor; partner-facing documents carry no version labels or internal changelog callouts; all Chronos partners are "Partner," never "Founding Partner"; the Spock / Virtual Chronos / Chronos taxonomy is load-bearing. Each rule is in memory because a specific failure made it necessary. Violations are caught at the cold read (Layer 9) and at the partner read at Gate 10 — not by this layer itself.
       </p>
     </div>
   </div>
@@ -842,27 +842,27 @@
   </p>
 
   <p>
-    Each judge is a Claude invocation against a structured prompt — rubric, IC pack composite, binary pass criterion. The judge reads the pack, names the sections it cites, scores against the rubric, and returns <em class="warm">PASS</em> or <em class="warm">FAIL</em> with reasoning. Two models — Opus 4.6 and Sonnet 4.5 — run each judge in parallel. Some judges are deterministic gates that run as code before any model is invoked. The rest are structured tool-use calls with a JSON schema, so the verdict cannot drift into prose.
+    Each judge is a Claude invocation against a structured prompt — rubric, IC pack composite, binary pass criterion. The judge reads the pack, names the sections it cites, scores against the rubric, and returns <em class="warm">PASS</em> or <em class="warm">FAIL</em> with reasoning. Two models — Claude Opus 4.7 and Claude Sonnet 4.6 — run each judge in parallel. Disagreement between the models is itself a calibration signal. The judges are structured tool-use calls with a JSON schema, so the verdict cannot drift into prose.
   </p>
 
   <div class="sidebar">
     <div class="tag">The roster — a sample</div>
     <h4>Thirty-two judges across sixteen dimensions — passing and failing, named honestly.</h4>
     <dl>
-      <dt>J-01 — Falsifiability of central thesis <span style="color:#2A7A3E;font-weight:600;">[passing canonically]</span></dt>
-      <dd>Tests whether thesis claims are stated with a falsifiable counter — a sentence of the form "X will reach Y by Z" the market can later mark you against.</dd>
-      <dt>J-02 — Evidence lineage <span style="color:#2A7A3E;font-weight:600;">[passing on CHYM]</span></dt>
-      <dd>Tests whether every load-bearing claim in the pack carries a source the verifier-pair can re-fetch. The Filings Reader and ADR-0014 carry most of the load here.</dd>
-      <dt>J-07 — Quantified negative-IRR scenario <span style="color:#B5651D;font-weight:600;">[dual-fail on CHYM and WISE]</span></dt>
-      <dd>Tests whether the bear case carries a fully quantified downside with revenue, margin and exit-multiple drivers each explicit. <em>v4 template does not yet require the negative-IRR scenario as a discrete table; v5 will.</em></dd>
-      <dt>J-12 — Reverse-multiple sanity check <span style="color:#B5651D;font-weight:600;">[dual-fail on CHYM and WISE]</span></dt>
-      <dd>Tests whether a reverse-P/E or reverse-DCF has been run and the implied-growth divergence flagged. <em>v4 template does not yet require the reverse-multiple back-out; v5 will.</em></dd>
-      <dt>J-14 — Evidence-based management assessment <span style="color:#2A7A3E;font-weight:600;">[passing on CHYM]</span></dt>
-      <dd>Tests whether the management read draws on operating history under stress, capital-allocation record, prior crisis behaviour, insider transactions, or communication consistency. The Org Reader's bench-depth analysis covers this when fully integrated into the pack.</dd>
-      <dt>J-21a — Engagement with public bear coverage <span style="color:#B5651D;font-weight:600;">[dual-fail on CHYM and WISE]</span></dt>
-      <dd>Tests whether the paper engages with the strongest published bear argument by name and source. <em>v4 template does not yet require an explicit "what the bears say" section; v5 will, with the Sentiment Reader's bear-report extract feeding it directly.</em></dd>
-      <dt>J-24 — Capital-structure stress test <span style="color:#B5651D;font-weight:600;">[dual-fail on CHYM and WISE]</span></dt>
-      <dd>Tests whether the paper engages with debt-maturity profile, covenant headroom under bear, and the working-capital funding picture. <em>v4 template does not yet require a discrete cap-structure stress; v5 will.</em></dd>
+      <dt>J-01 — Falsifiability of central thesis</dt>
+      <dd>Tests whether thesis claims are stated with a falsifiable counter — a sentence of the form "X will reach Y by Z" the market can later mark you against. Passes canonically.</dd>
+      <dt>J-02 — Distinctness from consensus</dt>
+      <dd>Tests whether the Chronos thesis is differentiated from the current sell-side consensus on a stated, specific variable or mechanism — not just higher conviction on the same story. Passed on CHYM.</dd>
+      <dt>J-07 — Quantified negative-IRR scenario</dt>
+      <dd>Tests whether the bear case carries a fully quantified downside with revenue, margin and exit-multiple drivers each explicit. Failed on CHYM and on WISE under both models — the v4 template does not yet require the negative-IRR scenario as a discrete table. v5 will.</dd>
+      <dt>J-12 — Reverse-multiple sanity check</dt>
+      <dd>Tests whether a reverse-P/E or reverse-DCF has been run and the implied-growth divergence flagged. Dual-failed on CHYM and WISE — the v4 template does not yet require the reverse-multiple back-out. v5 will.</dd>
+      <dt>J-14 — Evidence-based management assessment</dt>
+      <dd>Tests whether the management read draws on operating history under stress, capital-allocation record, prior crisis behaviour, insider transactions, or communication consistency. The Org Reader's bench-depth analysis covers this when fully integrated into the pack. Passed on CHYM.</dd>
+      <dt>J-21a — Engagement with public bear coverage</dt>
+      <dd>Tests whether the paper engages with the strongest published bear argument by name and source. Dual-failed on CHYM and WISE — the v4 template does not yet require an explicit "what the bears say" section. v5 will, with the Sentiment Reader's bear-report extract feeding it directly.</dd>
+      <dt>J-24 — Capital-structure stress test</dt>
+      <dd>Tests whether the paper engages with debt-maturity profile, covenant headroom under bear, and the working-capital funding picture. Dual-failed on CHYM and WISE — the v4 template does not yet require a discrete cap-structure stress. v5 will.</dd>
     </dl>
     <p style="margin-top:14px;font-size:14px;color:#4A4A4A;font-style:italic;">
       Other dimensions in the roster: Peer-Set Selection, Scenario Range, Disconfirming Evidence, Exit-Route Plausibility, Operational Capacity, Threat-Catalogue Coverage, Channel and Business-Model Fidelity, Base-Rate Calibration, Roster Freshness, Disclosure Inference. The sample above mixes passing and failing judges deliberately — the failing ones are where v5 is being built next.
@@ -870,7 +870,7 @@
   </div>
 
   <p>
-    The CHYM and WISE canary returned a <em class="ink">43 per cent aggregate pass rate</em> across 128 judge verdicts. That is not the judges working as designed — that is the v4 IC pack template incomplete in ten specific places, and the judges naming where. Of the fifteen judges that failed for both companies under both models, ten flag template gaps that v5 will fix: J-04, J-07, J-11, J-12, J-19, J-20, J-21a/b, J-22a/b, J-23, J-24. Five are substrate-gated and need infrastructure that does not yet exist — J-09 needs the Approved Claims Library, J-05 needs the VERIFIED_COMPS store, J-16 needs the Chronos rolling twenty-paper retrospective baseline — and those substrates are on the W12+ build queue. Partners should read the 43 per cent as the punch list for v5, not as v4's verdict on itself.
+    The CHYM and WISE canary returned a <em class="ink">43 per cent aggregate pass rate</em> across 128 judge verdicts. That is not the judges working as designed. It is the v4 IC pack template incomplete in ten specific places, and the judges naming where. Fifteen judges failed for both companies under both models. Ten of those — J-04, J-07, J-11, J-12, J-19, J-20, J-21a/b, J-22a/b, J-23, J-24 — flag template gaps that v5 will fix. The other five are substrate-gated: J-09 needs the Approved Claims Library, J-05 needs the VERIFIED_COMPS store, J-16 needs the Chronos rolling twenty-paper retrospective baseline. Those substrates do not exist yet — they sit on the W12+ build queue, and until they are built those judges are hard-coded to fail. Partners should read the 43 per cent as the punch list for v5, not as v4's verdict on itself.
   </p>
 
   <div class="pullquote">
@@ -897,7 +897,7 @@
   </p>
 
   <p>
-    By the numbers, for the canary that produced this memo: thirteen paired-agent runs on each ticker plus 128 judge verdicts cost $44.31 in API spend on the Gate 7 deep research and $11.80 on the judges — roughly $56 per ticker run end-to-end, excluding the human IC time at Gate 10. Wall-clock from Gate 6 PASS to IC pack distribution was approximately five days on the canary; the steady-state target is 72 hours once the v5 template gaps are closed. We do not have a track record yet. The CHYM IC paper is the first v4 ticker in front of the human IC. The honest stance is that v4 is producing partner-grade input today; whether the Spock view correlates with subsequent returns is a question for the post-IC follow-up over the next 24 months.
+    The numbers, for honesty. The canary that produced this memo cost $44.31 in API spend on the Gate 7 deep research and $11.80 on the judges — call it $56 per ticker, end-to-end, excluding the human IC time at Gate 10. Wall-clock from Gate 6 PASS to IC pack distribution was about five days; steady state, once the v5 template gaps are closed, should be 72 hours. We do not have a track record yet. The CHYM IC paper is the first v4 ticker in front of the human IC, and whether the Spock view correlates with subsequent returns is a question for the post-IC follow-up over the next twenty-four months — not something this memo can claim either way.
   </p>
 
   <p>
